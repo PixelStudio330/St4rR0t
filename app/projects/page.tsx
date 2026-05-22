@@ -276,18 +276,18 @@ export default function ProjectsPage() {
       </div>
 
       {/* FOOTER BANNER */}
-      <motion.div 
-        variants={cardVariants}
-        className="flex justify-center py-10"
-      >
-        <motion.div 
-          animate={{ y: [0, -5, 0] }}
-          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-          className="bg-[#F6F3EE] px-10 py-4 rounded-2xl border-[3px] border-[#69021E] text-sm font-[1000] text-[#69021E]/70 uppercase tracking-[0.3em] shadow-xl rotate-1"
-        >
-          🌸 More coming soon~ 🌸
-        </motion.div>
-      </motion.div>
+<motion.div 
+  variants={cardVariants}
+  className="flex justify-center py-6 md:py-10 px-4 w-full"
+>
+  <motion.div 
+    animate={{ y: [0, -5, 0] }}
+    transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+    className="bg-[#F6F3EE] px-6 py-3 md:px-10 md:py-4 rounded-2xl border-[3px] border-[#69021E] text-[10px] sm:text-xs md:text-sm font-[1000] text-[#69021E]/70 uppercase tracking-[0.2em] md:tracking-[0.3em] shadow-xl rotate-1 whitespace-nowrap max-w-full text-center"
+  >
+    ⭐ More coming soon~ 🌙
+  </motion.div>
+</motion.div>
     </motion.div>
   );
 }

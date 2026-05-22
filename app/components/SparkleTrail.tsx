@@ -23,15 +23,15 @@ export default function SparkleTrail() {
 
     const ctx = canvas.getContext("2d")!;
     const particles: Particle[] = [];
-    const emojis = ["🌙", "🍄"];
+    const emojis = ["🌙", "⭐", "🌸"];
     
-    // The "Brown & Rainbow" Palette
+    // Updated Palette: Clean Beiges, Subtle Reds, and Cream accents
     const colors = [
-      "#8b5a2b", // Theme Brown
-      "#FAF9F6", // Bright Cream
-      "#ffd166", // Warm Yellow
-      "#ff9a9e", // Soft Pink
-      "#e0f2f1"  // Soft Teal
+      "#F6F3EE", // Crisp Cream / Light Beige
+      "#EADECA", // Deep Warm Beige
+      "#D3A297", // Soft Muted Rose-Red
+      "#C2594E", // Subtle Terracotta Red
+      "#A37B68"  // Earthy Beige-Brown
     ];
 
     let w = (canvas.width = window.innerWidth);
@@ -138,7 +138,7 @@ export default function SparkleTrail() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full pointer-events-none z-9999"
+      className="fixed top-0 left-0 w-full h-full pointer-events-none z-[9999]"
     />
   );
 }
