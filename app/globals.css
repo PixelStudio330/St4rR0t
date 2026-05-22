@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+:root {
+  /* --- ☀️ LIGHT MODE (Alabama Crimson & Cetacean Blue / Dark Academia Gothic) --- */
+  --background: #F6F3EE; 
+  --foreground: #030206; /* Rich Black (Fogra39) */
+
+  /* Brand Colors - Updated Palette Mapping */
+  --color-mint-chip: #AA0235;      /* Swapped to Alabama Crimson */
+  --color-choco-dark: #69021E;     /* Swapped to Rosewood */
+  --color-cream-base: #030206;     /* Swapped to Rich Black */
+  --color-faded-teal: #021233;     /* Swapped to Cetacean Blue */
+}
+
+/* This handles the manual "Dark Mode" toggle */
+[data-theme='dark'] {
+  /* --- 🌙 DARK MODE (Retro Velvet / Deep Night) --- */
+  --background: #021233;           /* Cetacean Blue */
+  --foreground: #F6F3EE;
+
+  /* Brand Colors - Updated Palette Mapping */
+  --color-retro-olive: #021233;    /* Cetacean Blue */
+  --color-vintage-apple: #69021E;  /* Rosewood */
+  --color-mustard-flower: #710755; /* French Plum */
+  --color-blood-apple: #AA0235;    /* Alabama Crimson */
+  --color-cream-decay: #F6F3EE;
+}
+
+/* Respects System Settings */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --background: #021233;         /* Cetacean Blue */
+    --foreground: #F6F3EE;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  /* St4rLigh7 Palette Mapping */
+  --color-mint-chip: var(--color-mint-chip);
+  --color-choco-dark: var(--color-choco-dark);
+  --color-cream-base: var(--color-cream-base);
+  --color-faded-teal: var(--color-faded-teal);
+  
+  --color-retro-olive: var(--color-retro-olive);
+  --color-mustard-flower: var(--color-mustard-flower);
+  --color-blood-apple: var(--color-blood-apple);
+  --color-cream-decay: var(--color-cream-decay);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Courier New', Courier, monospace; 
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease;
+  min-height: 100vh;
+  background-image: url("https://www.transparenttextures.com/patterns/pinstriped-suit.png");
+  background-attachment: fixed;
+}
+
+/* Custom Selection color updated to match the new palette theme */
+::selection {
+  background: var(--color-mint-chip); /* Alabama Crimson */
+  color: #FFFFFF;
+}
+
+/* Custom Scrollbar for the Scrapbook */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #AA0235; /* Updated from old red to Alabama Crimson */
+  border-radius: 10px;
+  border: 2px solid var(--background); /* Dynamic gap to fit background switch */
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #AA0235 transparent;
+}

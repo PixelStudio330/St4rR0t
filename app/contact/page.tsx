@@ -1,0 +1,346 @@
+"use client";
+
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { Send, Mail, Heart, MessageSquare, User, Sparkles, Smartphone, Navigation, CheckCircle2, Instagram, Image as ImageIcon, X } from 'lucide-react';
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+  }
+};
+
+const itemVariants: Variants = {
+  hidden: { y: 20, opacity: 0, scale: 0.95 },
+  visible: { 
+    y: 0, 
+    opacity: 1, 
+    scale: 1,
+    transition: { type: "spring", stiffness: 100 }
+  }
+};
+
+const stickerHoverVariants: Variants = {
+  hidden: { y: 20, opacity: 0, scale: 0.95 },
+  visible: { 
+    y: 0, 
+    opacity: 1, 
+    scale: 1,
+    transition: { type: "spring", stiffness: 100 }
+  },
+  hover: { 
+    scale: 1.05, 
+    rotate: [0, -1, 1, 0], 
+    transition: { duration: 0.3 } 
+  }
+};
+
+export default function ContactPage() {
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [attachedFile, setAttachedFile] = useState<{ name: string; base64: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Convert image to base64 for API transmission and preview
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAttachedFile({
+          name: file.name,
+          base64: reader.result as string
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus('sending');
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      message: formData.get('message'),
+      attachment: attachedFile?.base64 || null,
+    };
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const response = await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setAttachedFile(null); 
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setStatus('error');
+    }
+  }
+
+  return (
+    <motion.div 
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="p-6 md:p-12 space-y-10 selection:bg-[#AA0235] selection:text-[#F6F3EE]"
+    >
+      {/* HEADER SECTION: Text is darkened to be legible over the body background image */}
+      <motion.div 
+        variants={itemVariants}
+        className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b-[4px] border-dashed border-[#F6F3EE]/60 pb-8"
+      >
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <motion.div 
+              animate={{ y: [0, -8, 0], rotate: [6, 12, 6] }}
+              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+              className="bg-[#69021E] text-[#F6F3EE] p-2 rounded-xl shadow-lg border-[3px] border-[#69021E]"
+            >
+              <Mail size={24} strokeWidth={3} />
+            </motion.div>
+            <h2 className="text-4xl font-[1000] text-[#F6F3EE] uppercase tracking-tighter">Get In Touch</h2>
+          </div>
+          <p className="text-sm font-[1000] text-[#F6F3EE]/70 uppercase tracking-[0.15em] pl-1">
+            Official Inquiries for <span className="text-[#F6F3EE] underline decoration-[#F6F3EE] decoration-[2px] underline-offset-4">StΛrR0t</span>
+          </p>
+        </div>
+      </motion.div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <motion.div variants={itemVariants} className="lg:col-span-7">
+          <AnimatePresence mode="wait">
+            {status !== 'success' ? (
+              /* MAIN CONTACT FORM: Now a beautiful solid Antique Beige card */
+              <motion.form 
+                key="contact-form"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, transition: { duration: 0.2 } }}
+                onSubmit={handleSubmit}
+                className="bg-[#F6F3EE] border-[4px] border-[#69021E] rounded-[3rem] p-8 shadow-[8px_8px_0px_0px_#69021E] space-y-6 relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/pinstriped-suit.png')] opacity-5 pointer-events-none mix-blend-multiply" />
+                
+                <div className="space-y-6 relative z-10">
+                   <div className="space-y-2">
+                     <label className="flex items-center gap-2 text-xs font-[1000] text-[#69021E] uppercase ml-2">
+                       <User size={14} /> Name
+                     </label>
+                     <input name="name" required placeholder="YOUR NAME" className="w-full bg-[#F6F3EE] border-[3px] border-[#69021E] rounded-2xl px-5 py-3 font-black text-[#030206] outline-none placeholder:text-[#69021E]/40 focus:ring-4 ring-[#AA0235]/20 transition-all" />
+                   </div>
+
+                   <div className="space-y-2">
+                     <label className="flex items-center gap-2 text-xs font-[1000] text-[#69021E] uppercase ml-2">
+                       <Mail size={14} /> Email
+                     </label>
+                     <input name="email" required type="email" placeholder="YOUR EMAIL" className="w-full bg-[#F6F3EE] border-[3px] border-[#69021E] rounded-2xl px-5 py-3 font-black text-[#030206] outline-none placeholder:text-[#69021E]/40 focus:ring-4 ring-[#AA0235]/20 transition-all" />
+                   </div>
+
+                   <div className="space-y-2">
+                     <label className="flex items-center gap-2 text-xs font-[1000] text-[#69021E] uppercase ml-2">
+                       <MessageSquare size={14} /> Message
+                     </label>
+                     <textarea name="message" required rows={4} placeholder="THE MESSAGE..." className="w-full bg-[#F6F3EE] border-[3px] border-[#69021E] rounded-[2rem] px-5 py-4 font-black text-[#030206] outline-none placeholder:text-[#69021E]/40 resize-none focus:ring-4 ring-[#AA0235]/20 transition-all" />
+                   </div>
+
+                   <div className="space-y-2">
+                     <label className="flex items-center gap-2 text-xs font-[1000] text-[#69021E] uppercase ml-2">
+                       <ImageIcon size={14} /> Attach Reference
+                     </label>
+                     
+                     <div className="flex flex-wrap items-end gap-4">
+                        <button 
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="bg-[#69021E] border-[3px] border-[#69021E] rounded-xl px-4 py-2 font-black text-[10px] text-[#F6F3EE] uppercase shadow-[0_3px_0px_0px_#69021E]/30 active:shadow-none active:translate-y-[2px] transition-all flex items-center gap-2 h-fit"
+                        >
+                          {attachedFile ? "Change Image" : "Choose File"}
+                        </button>
+                        
+                        <input 
+                          type="file" 
+                          ref={fileInputRef} 
+                          onChange={handleFileChange} 
+                          accept="image/*" 
+                          className="hidden" 
+                        />
+
+                        {/* PREVIEW THUMBNAIL */}
+                        <AnimatePresence>
+                          {attachedFile && (
+                            <motion.div 
+                              initial={{ scale: 0, rotate: -10 }}
+                              animate={{ scale: 1, rotate: 2 }}
+                              exit={{ scale: 0, opacity: 0 }}
+                              className="relative group h-24 w-24 bg-[#F6F3EE] border-[3px] border-[#69021E] p-1.5 shadow-md rounded-sm"
+                            >
+                              <img 
+                                src={attachedFile.base64} 
+                                alt="Preview" 
+                                className="w-full h-full object-cover rounded-sm grayscale-[20%] group-hover:grayscale-0 transition-all"
+                              />
+                              <button 
+                                type="button"
+                                onClick={() => setAttachedFile(null)}
+                                className="absolute -top-3 -right-3 bg-[#AA0235] text-[#F6F3EE] rounded-full p-1 border-2 border-[#69021E] shadow-sm hover:scale-110 transition-transform"
+                              >
+                                <X size={12} strokeWidth={4} />
+                              </button>
+                              <div className="absolute -bottom-1 left-0 right-0 text-center">
+                                <span className="text-[6px] font-black text-[#69021E] uppercase bg-[#F6F3EE] px-1 truncate block">
+                                  {attachedFile.name}
+                                </span>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                     </div>
+                   </div>
+                </div>
+
+                <motion.button 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98, y: 4 }}
+                  type="submit"
+                  disabled={status === 'sending'}
+                  className={`w-full ${status === 'error' ? 'bg-[#710755]' : 'bg-[#69021E]'} text-[#F6F3EE] font-[1000] uppercase py-5 rounded-2xl border-[4px] border-[#69021E] shadow-[0_6px_0px_0px_rgba(105,2,30,0.3)] transition-colors flex items-center justify-center gap-3 disabled:opacity-70`}
+                >
+                  {status === 'sending' ? "SEALING ENVELOPE..." : status === 'error' ? "TRY AGAIN?" : "SEND MESSAGE"} 
+                  <motion.div animate={status === 'sending' ? { rotate: 360 } : {}} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
+                    <Send size={20} strokeWidth={3} />
+                  </motion.div>
+                </motion.button>
+                
+                {status === 'error' && (
+                  <p className="text-center text-xs font-black text-[#710755] uppercase tracking-tighter">
+                    Something went wrong! Please check your connection.
+                  </p>
+                )}
+              </motion.form>
+            ) : (
+              /* SUCCESS CONTAINER: Changed to matching Beige Card Base */
+              <motion.div 
+                key="success-screen"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="bg-[#F6F3EE] border-[4px] border-[#69021E] rounded-[2rem] p-12 shadow-[12px_12px_0px_0px_rgba(105,2,30,0.2)] flex flex-col items-center justify-center text-center space-y-6 min-h-[450px] relative overflow-hidden"
+              >
+                <div className="absolute top-8 right-8 w-24 h-24 border-[3px] border-dashed border-[#AA0235]/40 rounded-full flex items-center justify-center rotate-12 opacity-40">
+                    <span className="text-[#AA0235]/60 font-[1000] text-[10px] uppercase text-center leading-none">st4rligh7<br/>2026</span>
+                </div>
+
+                <motion.div 
+                  initial={{ scale: 0 }} 
+                  animate={{ scale: 1 }} 
+                  transition={{ type: "spring", delay: 0.2 }}
+                  className="bg-[#AA0235] p-4 rounded-full text-[#F6F3EE] shadow-lg border-2 border-[#69021E]"
+                >
+                    <CheckCircle2 size={48} strokeWidth={3} />
+                </motion.div>
+                
+                <div className="space-y-2">
+                    <h3 className="text-3xl font-[1000] text-[#69021E] uppercase italic">Message Sealed!</h3>
+                    <p className="text-[#69021E]/70 font-bold text-sm uppercase tracking-widest max-w-[250px] mx-auto">
+                        It's flying across the digital clouds to my inbox.
+                    </p>
+                </div>
+
+                <button 
+                  onClick={() => setStatus('idle')}
+                  className="text-[#69021E]/60 font-[1000] uppercase text-xs border-b-2 border-[#69021E]/40 hover:pb-1 transition-all z-20"
+                >
+                  Write another one?
+                </button>
+
+                <motion.div 
+                  animate={{ x: [0, 400], y: [0, -400], opacity: [0, 1, 0] }}
+                  transition={{ repeat: Infinity, duration: 3, ease: "easeIn" }}
+                  className="absolute bottom-6 left-6 text-[#69021E]/20"
+                >
+                    <Navigation size={40} fill="currentColor" />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* RIGHT SIDE INFO BOXES: Transformed into gorgeous solid Beige sticker-cards */}
+        <div className="lg:col-span-5 space-y-8">
+            <motion.div 
+              variants={stickerHoverVariants}
+              whileHover="hover"
+              className="bg-[#F6F3EE] border-[4px] border-[#69021E] rounded-[2.5rem] p-7 shadow-[6px_6px_0px_0px_#69021E] rotate-1 relative group overflow-hidden text-[#030206]"
+            >
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+                className="absolute -right-4 -top-4 opacity-10 group-hover:opacity-20 transition-opacity text-[#710755]"
+              >
+                <Sparkles size={100} />
+              </motion.div>
+              <h3 className="text-xl font-[1000] uppercase mb-2 flex items-center gap-2 text-[#69021E]">
+                  <Smartphone size={20} strokeWidth={3} /> StΛrR0t
+              </h3>
+              <p className="text-sm font-black italic leading-relaxed text-[#69021E]/80">
+                Built with care. Bringing artsy ideas to the web. Let's make something iconic!
+              </p>
+            </motion.div>
+
+            <motion.div 
+              variants={stickerHoverVariants}
+              whileHover="hover"
+              className="bg-[#F6F3EE] border-[4px] border-[#69021E] rounded-[2.5rem] p-7 shadow-[6px_6px_0px_0px_#69021E] -rotate-1 space-y-4 text-[#030206]"
+            >
+              <h3 className="text-lg font-[1000] text-[#69021E] uppercase">Quick Response</h3>
+              <p className="text-xs font-bold text-[#69021E]/70 uppercase leading-relaxed">
+                I usually reply within 24 hours. If it's urgent, feel free to poke me on Instagram!
+              </p>
+              
+              <motion.a 
+                href="https://www.instagram.com/n._.zaman/?__pwa=1"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                whileHover={{ scale: 1.05, rotate: 2 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center justify-center gap-2 w-full bg-[#69021E] text-[#F6F3EE] py-3 rounded-2xl border-[3px] border-[#69021E] shadow-[0_4px_0px_0px_rgba(105,2,30,0.3)] font-[1000] text-xs uppercase transition-all"
+              >
+                <Instagram size={16} strokeWidth={3} />
+                Slide into DMs
+              </motion.a>
+            </motion.div>
+
+            <motion.div 
+              variants={itemVariants}
+              whileHover={{ scale: 1.05, rotate: 0 }}
+              className="bg-[#F6F3EE] border-[4px] border-[#69021E] rounded-[2.5rem] p-6 shadow-[6px_6px_0px_0px_#69021E] rotate-1 flex items-center gap-4 cursor-default"
+            >
+              <motion.div 
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ repeat: Infinity, duration: 2 }}
+                className="bg-[#F6F3EE] p-2 rounded-full border-2 border-[#69021E]"
+              >
+                <Heart size={20} fill="#AA0235" className="text-[#AA0235]" />
+              </motion.div>
+              <span className="text-[10px] font-[1000] text-[#69021E] uppercase tracking-tighter">
+                Always open for <br/> creative collaborations
+              </span>
+            </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
