@@ -183,7 +183,7 @@ export default function Dashboard() {
 
           <ul className="space-y-5 px-2 sm:px-4">
             {[
-              { icon: <Apple size={20} />, label: "GitHub", color: "#030206", url: "https://github.com/PixelStudio330" },
+              { icon: <Apple size={20} />, label: "GitHub", color: "#030206", url: "https://github.com/Mst-Gulnahar" },
               { icon: <Cherry size={20} />, label: "PixelStudio", color: "#69021E", url: "https://pixel-studio-opal.vercel.app/" },
               { icon: <Heart size={20} />, label: "Instagram", color: "#AA0235", url: "https://www.instagram.com/n._.zaman/" },
             ].map((link, i) => (
