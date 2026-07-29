@@ -197,7 +197,7 @@ export default function Dashboard() {
               <div className="absolute inset-0 bg-[#AA0235] rounded-[3rem] translate-x-3 translate-y-3 opacity-20" />
               <div className="relative aspect-square bg-[#F6F3EE] border-[4px] border-[#69021E] rounded-[3rem] overflow-hidden shadow-2xl">
                 <img
-                  src="/img/id.png"
+                  src="/img/profile.png"
                   alt="Nahar"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 brightness-[0.9] contrast-105"
                 />
