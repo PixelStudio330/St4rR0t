@@ -161,7 +161,7 @@ export default function Dashboard() {
                   </motion.button>
 
                   <motion.a
-                    href="/resume.pdf"
+                    href="/my-resume.pdf"
                     download="Nahar_Resume.pdf"
                     variants={wobbleHover}
                     whileHover="hover"
